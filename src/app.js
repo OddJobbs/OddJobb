@@ -1,40 +1,59 @@
 import React, { Component } from 'react';
-import { Avatar, Card, ListItem, Toolbar } from 'react-native-material-ui';
+import { Toolbar } from 'react-native-material-ui';
 
-import ajax from './resource/ajax.js';
-import PostCard from './postCard.js';
+import NavigationDrawer from './navigationDrawer.js'
+import PostSection from './postsection/postsection.js';
 
-import { Text, ScrollView, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+const styles = StyleSheet.create({
+    drawer: {
+        width: '66%'
+    }
+})
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showDrawer: false,
             page: 'posts',
             posts: []
         };
     }
 
-    componentDidMount() {
-        ajax.get('http://oddjobbackend.herokuapp.com/posts').then((posts) => {
-            this.setState({
-                posts: JSON.parse(posts.xhr._response)
-            })
-        });
+    toggleDrawer() {
+        this.setState({ showDrawer: !this.state.showDrawer });
+    }
+
+    renderMain(toggleDrawer) {
+        return (
+            <View>
+                <PostSection />
+            </View>);
     }
 
     render() {
-        const posts = this.state.posts;
+        const toggleDrawer = this.toggleDrawer.bind(this);
+        const showDrawer = this.state.showDrawer;
+        const mainContent = (
+            <View style={{ flex: 1 }}>
+                <PostSection />
+            </View>);
 
         return (
-            <View>
+            <View style={{ flex: 1 }}>
                 <Toolbar
-                    leftElement="menu"
-                    centerElement="OddJobb"
+                    leftElement={"menu"}
+                    onLeftElementPress={toggleDrawer}
+                    centerElement={"OddJobb"}
+                    rightElement={'menu'} />
+                <NavigationDrawer
+                    open={showDrawer}
+                    mainContent={mainContent}
+                    toggleDrawer={toggleDrawer}
                 />
-                <PostCard posts={posts} />
-
-            </View>
+            </View >
         );
     }
 }

@@ -3,7 +3,7 @@ import { Avatar, Card, ListItem } from 'react-native-material-ui';
 
 import { Text, ScrollView, View } from 'react-native';
 
-class PostCard extends Component {
+class PostList extends Component {
     constructor(props) {
         super(props);
     }
@@ -45,8 +45,8 @@ class PostCard extends Component {
     }
 }
 
-PostCard.propTypes = {
+PostList.propTypes = {
     posts: PropTypes.array
 }
 
-export default PostCard;
+export default PostList;
