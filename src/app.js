@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { Avatar, Drawer, Toolbar } from 'react-native-material-ui';
+import { Toolbar } from 'react-native-material-ui';
 
+import NavigationDrawer from './navigationDrawer.js'
 import PostSection from './postsection/postsection.js';
 
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+const styles = StyleSheet.create({
+    drawer: {
+        width: '66%'
+    }
+})
 
 class App extends Component {
     constructor(props) {
@@ -16,64 +23,37 @@ class App extends Component {
     }
 
     toggleDrawer() {
-        this.setState({ showDrawer: !this.state.showDrawer })
+        this.setState({ showDrawer: !this.state.showDrawer });
     }
 
-    renderDrawer() {
+    renderMain(toggleDrawer) {
         return (
-            <Drawer>
-                <Drawer.Header >
-                    <Drawer.Header.Account
-                        avatar={<Avatar text={'A'} />}
-                        accounts={[
-                            { avatar: <Avatar text="B" /> },
-                            { avatar: <Avatar text="C" /> },
-                        ]}
-                        footer={{
-                            dense: true,
-                            centerElement: {
-                                primaryText: 'Reservio',
-                                secondaryText: 'business@email.com',
-                            },
-                            rightElement: 'arrow-drop-down',
-                        }}
-                    />
-                </Drawer.Header>
-                <Drawer.Section
-                    divider
-                    items={[
-                        { icon: 'bookmark-border', value: 'Notifications' },
-                        { icon: 'today', value: 'Calendar', active: true },
-                        { icon: 'people', value: 'Clients' },
-                    ]}
-                />
-                <Drawer.Section
-                    title="Personal"
-                    items={[
-                        { icon: 'info', value: 'Info' },
-                        { icon: 'settings', value: 'Settings' },
-                    ]}
-                />
-            </Drawer>
-        );
+            <View>
+                <PostSection />
+            </View>);
     }
 
     render() {
         const toggleDrawer = this.toggleDrawer.bind(this);
-        const renderDrawer = this.renderDrawer.bind(this);
         const showDrawer = this.state.showDrawer;
+        const mainContent = (
+            <View style={{ flex: 1 }}>
+                <PostSection />
+            </View>);
 
         return (
-            <View>
+            <View style={{ flex: 1 }}>
                 <Toolbar
                     leftElement={"menu"}
                     onLeftElementPress={toggleDrawer}
                     centerElement={"OddJobb"}
                     rightElement={'menu'} />
-                <PostSection>
-                    {showDrawer && renderDrawer()}
-                </PostSection>
-            </View>
+                <NavigationDrawer
+                    open={showDrawer}
+                    mainContent={mainContent}
+                    toggleDrawer={toggleDrawer}
+                />
+            </View >
         );
     }
 }
